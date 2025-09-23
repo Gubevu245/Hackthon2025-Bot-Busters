@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>NATESA — Join</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#f6f8f9;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#111827;
+      --muted-2:#9ca3af;
+      --field-bg:#fbfbfb;
+      --border:#e6e9ec;
+      --primary:#111827;
+      --blue:#2563eb;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background:var(--bg);
+      color:var(--accent);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Header */
+    .site-header{
+      height:68px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 28px;
+      background:transparent;
+    }
+    .brand{font-weight:700;font-size:20px}
+    .nav{display:flex;gap:20px;align-items:center}
+    .nav a{color:var(--muted);text-decoration:none;font-size:15px}
+    .btn-register{background:#0f1724;color:#fff;padding:10px 14px;border-radius:8px;border:none;font-weight:600}
+
+    /* Main layout */
+    .wrap{max-width:980px;margin:32px auto 80px;display:flex;flex-direction:column;align-items:center}
+    .hero-title{margin-top:18px;text-align:center}
+    .hero-title h1{font-size:36px;margin:0 0 8px;font-weight:800}
+    .hero-title p{margin:0;color:var(--muted);font-size:15px}
+
+    /* Card */
+    .card{
+      width:420px;
+      background:var(--card);
+      border-radius:12px;
+      box-shadow:0 2px 0 rgba(16,24,40,0.03),0 10px 30px rgba(11,15,20,0.04);
+      margin-top:28px;
+      padding:26px 26px 20px;
+      border:1px solid var(--border);
+    }
+    .card h3{margin:0;font-size:18px;font-weight:700}
+    .card p.lead{margin:6px 0 18px;color:var(--muted);font-size:13px}
+
+    label{display:block;font-size:14px;margin-top:12px;margin-bottom:6px;color:#111827}
+    .field{
+      display:flex;align-items:center;background:var(--field-bg);border:1px solid var(--border);padding:10px 12px;border-radius:8px;
+      gap:8px;font-size:14px;color:var(--muted-2)
+    }
+    .field input,.field select{border:0;background:transparent;outline:none;font-size:14px;width:100%}
+    .field .icon{width:18px;opacity:0.6;cursor:pointer}
+
+    .checkbox-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+    .checkbox-row input{width:16px;height:16px}
+    .checkbox-row label{font-size:13px;color:var(--muted)}
+
+    .agreement{display:flex;align-items:flex-start;gap:10px;margin-top:12px}
+    .agreement input{width:16px;height:16px;margin-top:3px}
+    .agreement a{color:var(--blue);text-decoration:none}
+
+    .btn-primary{display:block;width:100%;padding:12px 16px;border-radius:10px;background:var(--primary);color:white;border:0;font-weight:600;margin-top:14px;box-shadow:0 1px 0 rgba(0,0,0,0.05)}
+
+    .alt{margin-top:14px;text-align:center;color:var(--muted);font-size:14px}
+    .alt .signin{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--accent);width:auto;min-width:160px;text-align:center}
+
+    /* small helpers */
+    .hr{height:1px;background:linear-gradient(90deg,transparent,#e6e9ec,transparent);margin:18px 0}
+
+    @media (max-width:480px){
+      .card{width:92%;padding:20px}
+      .hero-title h1{font-size:28px}
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">NATESA</div>
+    <nav class="nav">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Login</a>
+      <button class="btn-register">Register</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero-title">
+      <h1>Join NATESA</h1>
+      <p>Create your account and become part of our community</p>
+    </section>
+
+    <form class="card" autocomplete="off">
+      <h3>Register</h3>
+      <p class="lead">Fill in your details to create a new account</p>
+
+      <label for="fullname">Full Name</label>
+      <div class="field">
+        <input id="fullname" type="text" placeholder="Enter your full names...">
+      </div>
+
+      <label for="email">Email Address</label>
+      <div class="field">
+        <input id="email" type="email" placeholder="Enter your email...">
+      </div>
+
+      <label for="branch">University Branch</label>
+      <div class="field">
+        <select id="branch">
+          <option>Select your university</option>
+          <option>MaNaSO - Mangosuthu University of Technology</option>
+          <option>NBCSS - University of Zululand</option>
+          <option>MSNSS - Durban University of Technology</option>
+        </select>
+      </div>
+
+      <div class="checkbox-row">
+        <input id="bec" type="checkbox">
+        <label for="bec">I am a Branch Executive Committee (BEC) member</label>
+      </div>
+
+      <label for="password">Password</label>
+      <div class="field">
+        <input id="password" type="password" placeholder="Create a password">
+        <svg id="togglePassword" class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      </div>
+
+      <label for="confirm">Confirm Password</label>
+      <div class="field">
+        <input id="confirm" type="password" placeholder="Confirm your password">
+        <svg id="toggleConfirm" class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+      </div>
+
+      <div class="agreement">
+        <input id="agree" type="checkbox">
+        <label for="agree">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a></label>
+      </div>
+
+      <button type="submit" class="btn-primary">Create account</button>
+
+      <div class="hr"></div>
+
+      <div class="alt">Already have an account?</div>
+      <div style="display:flex;justify-content:center;">
+        <button type="button" class="signin">Sign in instead</button>
+      </div>
+
+    </form>
+  </main>
+
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    togglePassword.addEventListener('click', () => {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+    });
+
+    const toggleConfirm = document.getElementById('toggleConfirm');
+    const confirm = document.getElementById('confirm');
+    toggleConfirm.addEventListener('click', () => {
+      const type = confirm.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirm.setAttribute('type', type);
+    });
+  </script>
+</body>
+</html>
