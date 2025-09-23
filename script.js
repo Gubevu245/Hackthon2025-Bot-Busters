@@ -1,14 +1,31 @@
-document.getElementById('loginForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+function validateLoginForm() {
+  let isValid = true;
 
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
 
-  const email = document.querySelector('input[type="email"]').value;
-  const password = document.querySelector('input[type="password"]').value;
+  emailError.textContent = "";
+  passwordError.textContent = "";
 
-  if (email === '' || password === '') {
-    alert('Please fill in both fields');
-    return;
+  const emailRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+  if (email === "") {
+    emailError.textContent = "Email is required.";
+    isValid = false;
+  } else if (!email.match(emailRegex)) {
+    emailError.textContent = "Enter a valid email address.";
+    isValid = false;
   }
 
-  alert('Login successful (placeholder)');
-});
+  if (password === "") {
+    passwordError.textContent = "Password is required.";
+    isValid = false;
+  } else if (password.length < 6) {
+    passwordError.textContent = "Password must be at least 6 characters.";
+    isValid = false;
+  }
+
+  return isValid;
+}
