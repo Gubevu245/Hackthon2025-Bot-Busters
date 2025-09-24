@@ -11,6 +11,10 @@
   # Directory where functions are located
   functions = "netlify/functions"
 
+# Plugins
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 # Redirects for API endpoints to Netlify Functions
 [[redirects]]
   from = "/api/*"
