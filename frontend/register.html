@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - NaTeSA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">NaTeSA</div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html">Login</a></li>
+      <li><a href="register.html" class="active btn">Register</a></li>
+    </ul>
+  </nav>
+
+  <div class="login-container" style="width: 450px; max-width: 90%;">
+    <h2>Create your NaTeSA Account</h2>
+    <p>Fill in your details to get started</p>
+
+    <!-- Main error message container -->
+    <div id="mainError" class="error-banner" style="display: none; background-color: #ffebee; color: #c62828; padding: 10px; border-radius: 4px; margin-bottom: 15px; text-align: center;"></div>
+
+    <form id="registerForm">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" placeholder="Enter your full name" required />
+      <div id="nameError" class="error"></div>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter your email address" required />
+      <div id="emailError" class="error"></div>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Create a password" required />
+      <div id="passwordError" class="error"></div>
+
+      <label for="confirm">Confirm Password</label>
+      <input type="password" id="confirm" placeholder="Confirm your password" required />
+      <div id="confirmError" class="error"></div>
+
+      <label for="university">University Branch</label>
+      <select id="university" required>
+        <option value="" disabled selected>Select your university branch</option>
+        <option>Mangosuthu University of Technology</option>
+        <option>University of Zululand</option>
+        <option>Durban University of Technology</option>
+        <option>University of Johannesburg</option>
+        <option>University of the Free State</option>
+        <option>Nelson Mandela University</option>
+        <option>Cape Peninsula University of Technology</option>
+        <option>University of the Western Cape</option>
+        <option>University of Cape Town</option>
+        <option>Rhodes University</option>
+        <option>University of Mpumalanga</option>
+        <option>Tshwane University of Technology</option>
+        <option>University of KwaZulu-Natal</option>
+        <option>North-West University</option>
+        <option>University of Pretoria</option>
+        <option>University of the Witwatersrand</option>
+      </select>
+      <div id="universityError" class="error"></div>
+
+      <div class="options" style="margin-top: 15px;">
+        <div>
+          <input type="checkbox" id="bec" />
+          <label for="bec">I am a BEC member</label>
+        </div>
+      </div>
+
+      <div class="options" style="margin-top: 15px;">
+        <div>
+          <input type="checkbox" id="agree" required />
+          <label for="agree">I agree to the Terms and Conditions and Privacy Policy</label>
+        </div>
+      </div>
+      <div id="agreeError" class="error"></div>
+
+      <button type="submit">Create Account</button>
+
+      <div class="register">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is already logged in
+      if (isLoggedIn()) {
+        // Redirect to dashboard or home page
+        window.location.href = 'index.html';
+      }
+
+      // Show/hide BEC position field based on checkbox
+      const becMember = document.querySelector('#bec');
+
+      // Form validation
+      const registerForm = document.querySelector('#registerForm');
+      const mainError = document.querySelector('#mainError');
+
+      // Add input event listeners to all form fields to clear error message when user types
+      document.querySelectorAll('#registerForm input, #registerForm select').forEach(element => {
+        element.addEventListener('input', function() {
+          // Hide the main error when user starts typing
+          mainError.style.display = 'none';
+        });
+      });
+
+      registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        // Reset error messages
+        document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+        // Hide the main error message
+        const mainError = document.querySelector('#mainError');
+        mainError.style.display = 'none';
+
+        // Validate name
+        const name = document.querySelector('#fullname').value.trim();
+        if (name === '') {
+          document.querySelector('#nameError').textContent = 'Name is required';
+          isValid = false;
+        }
+
+        // Validate email
+        const email = document.querySelector('#email').value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === '') {
+          document.querySelector('#emailError').textContent = 'Email is required';
+          isValid = false;
+        } else if (!emailRegex.test(email)) {
+          document.querySelector('#emailError').textContent = 'Please enter a valid email address';
+          isValid = false;
+        }
+
+        // Validate password
+        const password = document.querySelector('#password').value;
+        if (password === '') {
+          document.querySelector('#passwordError').textContent = 'Password is required';
+          isValid = false;
+        } else if (password.length < 8) {
+          document.querySelector('#passwordError').textContent = 'Password must be at least 8 characters';
+          isValid = false;
+        }
+
+        // Validate confirm password
+        const confirm = document.querySelector('#confirm').value;
+        if (confirm === '') {
+          document.querySelector('#confirmError').textContent = 'Please confirm your password';
+          isValid = false;
+        } else if (confirm !== password) {
+          document.querySelector('#confirmError').textContent = 'Passwords do not match';
+          isValid = false;
+        }
+
+        // Validate university selection
+        const university = document.querySelector('#university').value;
+        if (university === '' || university === null) {
+          document.querySelector('#universityError').textContent = 'Please select your university branch';
+          isValid = false;
+        }
+
+        // Validate terms agreement
+        const terms = document.querySelector('#agree').checked;
+        if (!terms) {
+          document.querySelector('#agreeError').textContent = 'You must agree to the Terms and Conditions';
+          isValid = false;
+        }
+
+        // If valid, submit the form
+        if (isValid) {
+          // Show loading state
+          const submitButton = registerForm.querySelector('button[type="submit"]');
+          const originalButtonText = submitButton.textContent;
+          submitButton.textContent = 'Creating Account...';
+          submitButton.disabled = true;
+
+          try {
+            // Map university to branch_id
+            const universityToBranchMap = {
+              'Mangosuthu University of Technology': 1,
+              'University of Zululand': 2,
+              'Durban University of Technology': 3,
+              'University of Johannesburg': 4,
+              'University of the Free State': 5,
+              'Nelson Mandela University': 6,
+              'Cape Peninsula University of Technology': 7,
+              'University of the Western Cape': 8,
+              'University of Cape Town': 9,
+              'Rhodes University': 10,
+              'University of Mpumalanga': 11,
+              'Tshwane University of Technology': 12,
+              'University of KwaZulu-Natal': 13,
+              'North-West University': 14,
+              'University of Pretoria': 15,
+              'University of the Witwatersrand': 16
+            };
+
+            // Get branch_id from university selection
+            const branch_id = universityToBranchMap[university] || 1;
+
+            // Prepare user data
+            const userData = {
+              name: name,
+              email: email,
+              password: password,
+              role: becMember.checked ? 'bec' : 'member',
+              is_bec_member: becMember.checked,
+              branch_id: branch_id,
+              status: 'active'
+            };
+
+            // Call registration API
+            const response = await registerUser(userData);
+
+            // Show success message
+            alert('Registration successful! Redirecting to login...');
+
+            // Redirect to login page
+            setTimeout(function() {
+              window.location.href = 'login.html';
+            }, 1000);
+          } catch (error) {
+            // Convert technical error messages to user-friendly ones
+            let userFriendlyMessage = 'Registration failed. Please try again later.';
+
+            if (error.message) {
+              // Check for specific error types and provide friendly messages
+              if (error.message.includes('foreign key constraint')) {
+                userFriendlyMessage = 'We\'re having trouble with your university selection. Please try again later or contact support.';
+              } else if (error.message.includes('already exists')) {
+                userFriendlyMessage = 'An account with this email already exists. Please use a different email or try logging in.';
+              } else if (error.message.includes('validation')) {
+                userFriendlyMessage = 'Please check your information and try again.';
+              }
+            }
+
+            // Display user-friendly error message in both places
+            document.querySelector('#emailError').textContent = userFriendlyMessage;
+
+            // Show the main error message
+            const mainError = document.querySelector('#mainError');
+            mainError.textContent = userFriendlyMessage;
+            mainError.style.display = 'block';
+          } finally {
+            // Reset button state
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

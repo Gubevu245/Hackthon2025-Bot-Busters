@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NaTeSA News Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/news.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <i class="fas fa-newspaper"></i>
+                <span>NaTeSA News</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="members.html">Members</a>
+                <a href="events.html">Events</a>
+                <a href="news.html" class="active">News</a>
+                <a href="resources.html">Resources</a>
+            </div>
+        </div>
+        <div class="user-info">
+            <span class="user-name">Loading...</span>
+            <button class="logout-btn">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="header">
+            <h1><i class="fas fa-newspaper"></i> News Management</h1>
+            <button id="addNewsBtn" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add News Article
+            </button>
+        </div>
+
+        <div class="filters">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search news...">
+            </div>
+            <div class="filter-group">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter">
+                    <option value="all">All Articles</option>
+                    <option value="published">Published</option>
+                    <option value="draft">Draft</option>
+                    <option value="archived">Archived</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="newsContainer" class="news-grid">
+            <!-- News articles will be loaded here -->
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading news articles...
+            </div>
+        </div>
+    </main>
+
+    <!-- News Modal -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Add News Article</h2>
+            <form id="newsForm">
+                <input type="hidden" id="newsId">
+
+                <div class="form-group">
+                    <label for="newsTitle">Title</label>
+                    <input type="text" id="newsTitle" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newsDate">Publication Date</label>
+                        <input type="date" id="newsDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newsAuthor">Author</label>
+                        <input type="text" id="newsAuthor" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newsContent">Content</label>
+                    <textarea id="newsContent" rows="6" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="newsStatus">Status</label>
+                    <select id="newsStatus" required>
+                        <option value="draft">Draft</option>
+                        <option value="published" selected>Published</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelNews">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Article</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <h3>Confirm Action</h3>
+            <p id="confirmMessage">Are you sure you want to delete this news article?</p>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="cancelConfirm">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmAction">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include auth.js for authentication functions -->
+    <script src="js/auth.js"></script>
+    <!-- Include news.js for news management functionality -->
+    <script src="js/news.js" type="module"></script>
+
+    <!-- Success and Error Message Toasts -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        // Make toast functions globally available
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast show ${type}`;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Global error handler
+        window.addEventListener('error', function(event) {
+            console.error('Global error:', event.error);
+            showToast('An error occurred. Please try again.', 'error');
+        });
+    </script>
+</body>
+</html>

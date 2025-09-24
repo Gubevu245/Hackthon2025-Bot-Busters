@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - NaTeSA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">NaTeSA</div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" class="active">Login</a></li>
+      <li><a href="register.html" class="btn">Register</a></li>
+    </ul>
+  </nav>
+
+  <div class="login-container">
+    <h2>Login to NaTeSA</h2>
+    <p>Enter your credentials to access your account</p>
+
+    <form id="loginForm">
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter your email..." required />
+      <div id="emailError" class="error"></div>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password..." required />
+      <div id="passwordError" class="error"></div>
+
+      <div class="options">
+        <div>
+          <input type="checkbox" id="remember" />
+          <label for="remember">Remember me</label>
+        </div>
+        <a href="reset-password.html">Forgot password?</a>
+      </div>
+
+      <button type="submit">Sign in</button>
+
+      <div class="register">
+        Don't have an account? <a href="register.html">Register</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is already logged in
+      if (isLoggedIn()) {
+        // Redirect to dashboard or home page
+        window.location.href = 'index.html';
+      }
+
+      // Handle login form submission
+      const loginForm = document.getElementById('loginForm');
+
+      loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Validate form
+        if (!validateLoginForm()) {
+          return;
+        }
+
+        // Show loading state
+        const submitButton = loginForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Signing in...';
+        submitButton.disabled = true;
+
+        // Clear previous error messages
+        document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+        try {
+          // Get form data
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value.trim();
+
+          // Call login API
+          const response = await loginUser({ email, password });
+
+          // Redirect to dashboard or home page
+          window.location.href = 'index.html';
+        } catch (error) {
+          // Display error message
+          const errorMessage = error.message || 'Login failed. Please try again.';
+          document.getElementById('emailError').textContent = errorMessage;
+        } finally {
+          // Reset button state
+          submitButton.textContent = originalButtonText;
+          submitButton.disabled = false;
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+/* Additional styles specific to the about page */
+
+/* ---------- PAGE CONTENT ---------- */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+section {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+ul {
+  margin-left: 20px;
+  list-style-type: disc;
+}
+
+/* Leadership Cards */
+.leadership-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.leadership-card {
+  background: #e6f0ff;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid #b3d1ff;
+}
+
+.leadership-card h3 {
+  margin-bottom: 8px;
+  color: #0059b3;
+}
+
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.gallery img {
+  width: 100%;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  text-align: center;
+  padding: 15px;
+  background: #003366;
+  color: white;
+  margin-top: 20px;
+}
+
+/* ---------- RESPONSIVE DESIGN ---------- */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide links on mobile */
+  }
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .container {
+    width: 95%;
+  }
+}
