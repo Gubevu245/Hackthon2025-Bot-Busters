@@ -85,6 +85,20 @@
     /* small helpers */
     .hr{height:1px;background:linear-gradient(90deg,transparent,#e6e9ec,transparent);margin:18px 0}
 
+    /* success + error */
+    .success-message{
+      display:none;
+      margin-top:15px;
+      color:green;
+      font-weight:600;
+    }
+
+    .error-message{
+      color:red;
+      font-size:13px;
+      margin-top:6px;
+    }
+
     @media (max-width:480px){
       .card{width:92%;padding:20px}
       .hero-title h1{font-size:28px}
@@ -108,90 +122,168 @@
       <p>Create your account and become part of our community</p>
     </section>
 
-    <form class="card" autocomplete="off">
+    <form class="card" id="registerForm" autocomplete="off">
       <h3>Register</h3>
       <p class="lead">Fill in your details to create a new account</p>
 
       <label for="fullname">Full Name</label>
       <div class="field">
-        <input id="fullname" type="text" placeholder="Enter your full names...">
+        <input id="fullname" type="text" placeholder="Enter your full names..." required>
       </div>
 
       <label for="email">Email Address</label>
       <div class="field">
-        <input id="email" type="email" placeholder="Enter your email...">
+        <input id="email" type="email" placeholder="Enter your email..." required>
       </div>
+      <div id="emailError" class="error-message" aria-live="polite"></div>
 
       <label>University Branch</label>
-       <select>
-        <option>Select your university</option>
-        <option>Mangosuthu University of Technology</option>
-        <option>University of Zululand</option>
-        <option>Durban University of Technology</option>
-        <option>University of Johannesburg</option>
-        <option>University of the Free State</option>
-        <option>Nelson Mandela University</option>
-        <option>Cape Peninsula University of Technology</option>
-        <option>University of the Western Cape</option>
-        <option>University of Cape Town</option>
-        <option>Rhodes University</option>
-        <option>University of Mpumalanga</option>
-        <option>Tshwane University of Technology</option>
-        <option>University of KwaZulu-Natal</option>
-        <option>North-West University</option>
-        <option>University of Pretoria</option>
-        <option>University of the Witwatersrand</option>
-      
-       </select>
+      <div class="field">
+        <select id="university" required>
+          <option value="">Select your university</option>
+          <option>Mangosuthu University of Technology</option>
+          <option>University of Zululand</option>
+          <option>Durban University of Technology</option>
+          <option>University of Johannesburg</option>
+          <option>University of the Free State</option>
+          <option>Nelson Mandela University</option>
+          <option>Cape Peninsula University of Technology</option>
+          <option>University of the Western Cape</option>
+          <option>University of Cape Town</option>
+          <option>Rhodes University</option>
+          <option>University of Mpumalanga</option>
+          <option>Tshwane University of Technology</option>
+          <option>University of KwaZulu-Natal</option>
+          <option>North-West University</option>
+          <option>University of Pretoria</option>
+          <option>University of the Witwatersrand</option>
+        </select>
       </div>
 
       <div class="checkbox-row">
-        <input id="bec" type="checkbox">
+        <input id="bec" type="checkbox" aria-label="I am a BEC member">
         <label for="bec">I am a Branch Executive Committee (BEC) member</label>
       </div>
 
       <label for="password">Password</label>
       <div class="field">
-        <input id="password" type="password" placeholder="Create a password">
+        <input id="password" type="password" placeholder="Create a password" required>
         <svg id="togglePassword" class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
       </div>
+      <div id="passwordError" class="error-message" aria-live="polite"></div>
 
       <label for="confirm">Confirm Password</label>
       <div class="field">
-        <input id="confirm" type="password" placeholder="Confirm your password">
+        <input id="confirm" type="password" placeholder="Confirm your password" required>
         <svg id="toggleConfirm" class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
       </div>
+      <div id="confirmError" class="error-message" aria-live="polite"></div>
 
       <div class="agreement">
-        <input id="agree" type="checkbox">
+        <input id="agree" type="checkbox" aria-label="Agree to terms">
         <label for="agree">I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a></label>
       </div>
+      <div id="agreeError" class="error-message" aria-live="polite"></div>
 
       <button type="submit" class="btn-primary">Create account</button>
 
       <div class="hr"></div>
 
       <div class="alt">Already have an account?</div>
-      <div style="display:flex;justify-content:center;">
+      <div style="display:flex;justify-content:center;flex-direction:column;align-items:center;">
         <button type="button" class="signin">Sign in instead</button>
+        <div id="successMessage" class="success-message" role="status" aria-live="polite">Account created successfully!</div>
       </div>
 
     </form>
   </main>
 
   <script>
+    // Safe attach: only add listeners if icons exist
     const togglePassword = document.getElementById('togglePassword');
-    const password = document.getElementById('password');
-    togglePassword.addEventListener('click', () => {
-      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-      password.setAttribute('type', type);
-    });
-
     const toggleConfirm = document.getElementById('toggleConfirm');
+    const password = document.getElementById('password');
     const confirm = document.getElementById('confirm');
-    toggleConfirm.addEventListener('click', () => {
-      const type = confirm.getAttribute('type') === 'password' ? 'text' : 'password';
-      confirm.setAttribute('type', type);
+
+    if (togglePassword && password) {
+      togglePassword.addEventListener('click', () => {
+        password.type = (password.type === 'password') ? 'text' : 'password';
+      });
+    }
+    if (toggleConfirm && confirm) {
+      toggleConfirm.addEventListener('click', () => {
+        confirm.type = (confirm.type === 'password') ? 'text' : 'password';
+      });
+    }
+
+    // Form validation + uniqueness check
+    const form = document.getElementById('registerForm');
+    const successMessage = document.getElementById('successMessage');
+    const passwordError = document.getElementById('passwordError');
+    const confirmError = document.getElementById('confirmError');
+    const emailError = document.getElementById('emailError');
+    const agreeError = document.getElementById('agreeError');
+    const emailInput = document.getElementById('email');
+    const agreeCheckbox = document.getElementById('agree');
+
+    // In-memory store for submitted emails (session only)
+    const registeredEmails = [];
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      // Clear previous errors
+      passwordError.textContent = '';
+      confirmError.textContent = '';
+      emailError.textContent = '';
+      agreeError.textContent = '';
+      successMessage.style.display = 'none';
+
+      const fullName = document.getElementById('fullname').value.trim();
+      const emailVal = (emailInput.value || '').trim().toLowerCase();
+      const passVal = (password.value || '').trim();
+      const confirmVal = (confirm.value || '').trim();
+
+      // Basic email presence/format check
+      if (!emailVal) {
+        emailError.textContent = 'Please enter your email address.';
+        return;
+      }
+      // Use browser's email pattern to test quickly
+      if (!emailInput.checkValidity()) {
+        emailError.textContent = 'Please enter a valid email address.';
+        return;
+      }
+
+      // Password rules: 12+ chars, one uppercase, one number, one special char
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d!@#$%^&*(),.?":{}|<>]{12,}$/;
+      if (!passwordRegex.test(passVal)) {
+        passwordError.textContent = 'Password must be at least 12 characters long, include an uppercase letter, a number, and a special character.';
+        return;
+      }
+
+      // Confirm match
+      if (passVal !== confirmVal) {
+        confirmError.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      // Email uniqueness (case-insensitive)
+      if (registeredEmails.includes(emailVal)) {
+        emailError.textContent = 'This email is already registered.';
+        return;
+      }
+
+      // Terms agreement required
+      if (!agreeCheckbox.checked) {
+        agreeError.textContent = 'You must agree to the Terms and Conditions.';
+        return;
+      }
+
+      // All good -> register email, show success, reset form
+      registeredEmails.push(emailVal);
+      successMessage.style.display = 'block';
+      form.reset();
     });
   </script>
 </body>
