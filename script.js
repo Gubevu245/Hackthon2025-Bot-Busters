@@ -26,6 +26,6 @@ function validateLoginForm() {
     passwordError.textContent = "Password must be at least 6 characters.";
     isValid = false;
   }
-
+  
   return isValid;
 }
