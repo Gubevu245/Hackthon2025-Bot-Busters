@@ -4,7 +4,8 @@
  */
 
 // Constants
-const API_BASE_URL = 'http://localhost:3000/api';
+// API_BASE_URL is imported from config.js
+// Make sure config.js is included before this file in HTML
 
 // State management
 let branches = []; // Store branches data
@@ -34,29 +35,29 @@ const logoutBtn = document.querySelector('.logout-btn');
 document.addEventListener('DOMContentLoaded', async function() {
     // Check if user is logged in
     if (!protectRoute()) return;
-    
+
     // Get current user data
     currentUser = await getCurrentUser();
     if (!currentUser) {
         logout();
         return;
     }
-    
+
     // Update UI with user info
     updateUserInfo(currentUser);
-    
+
     // Fetch data
     await Promise.all([
         fetchBranches(),
         fetchMembers(),
         fetchAlumni()
     ]);
-    
+
     // Initialize UI
     populateSelects();
     renderTabs();
     renderData();
-    
+
     // Set up event listeners
     setupEventListeners();
 });
@@ -71,11 +72,11 @@ async function fetchBranches() {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to fetch branches');
         }
-        
+
         branches = await response.json();
     } catch (error) {
         console.error('Error fetching branches:', error);
@@ -93,11 +94,11 @@ async function fetchMembers() {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to fetch members');
         }
-        
+
         const users = await response.json();
         // Filter out alumni
         members = users.filter(user => user.status !== 'alumni');
@@ -117,11 +118,11 @@ async function fetchAlumni() {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to fetch alumni');
         }
-        
+
         alumni = await response.json();
     } catch (error) {
         console.error('Error fetching alumni:', error);
@@ -134,7 +135,7 @@ async function fetchAlumni() {
  */
 function updateUserInfo(user) {
     if (!user) return;
-    
+
     // Update user icon with initials
     const userIcon = document.querySelector('.user-icon');
     if (userIcon) {
@@ -145,7 +146,7 @@ function updateUserInfo(user) {
             .substring(0, 2);
         userIcon.textContent = initials;
     }
-    
+
     // Update user name
     const userName = document.querySelector('.user-info span');
     if (userName) {
@@ -158,20 +159,20 @@ function updateUserInfo(user) {
  */
 function populateSelects() {
     if (!branchFilter || !document.getElementById('branch')) return;
-    
+
     // Branch filter
     branchFilter.innerHTML = '<option>All branches</option>';
-    
+
     // Modal branch select
     const modalBranchSelect = document.getElementById('branch');
     modalBranchSelect.innerHTML = '';
-    
+
     // Add branches to both selects
     branches.forEach(branch => {
         const option = document.createElement('option');
         option.value = branch.id;
         option.textContent = branch.university || branch.name;
-        
+
         branchFilter.appendChild(option.cloneNode(true));
         modalBranchSelect.appendChild(option);
     });
@@ -182,10 +183,10 @@ function populateSelects() {
  */
 function renderTabs() {
     if (!viewTabs) return;
-    
+
     const activeCount = members.length;
     const alumniCount = alumni.length;
-    
+
     viewTabs.innerHTML = `
         <div class="tab ${currentView === 'active' ? 'active' : ''}" data-view="active">
             Active Members (${activeCount})
@@ -202,7 +203,7 @@ function renderTabs() {
 function getFilteredData() {
     let data = currentView === 'active' ? members : alumni;
     let filtered = [...data];
-    
+
     // Permission filter: if not NEC, only show members from same branch
     if (currentUser && currentUser.role !== 'nec') {
         filtered = filtered.filter(item => {
@@ -210,7 +211,7 @@ function getFilteredData() {
             return branchId === currentUser.branch_id;
         });
     }
-    
+
     // Search filter
     const search = searchInput ? searchInput.value.toLowerCase() : '';
     if (search) {
@@ -221,7 +222,7 @@ function getFilteredData() {
                    email.toLowerCase().includes(search);
         });
     }
-    
+
     // Branch filter
     const branch = branchFilter ? branchFilter.value : 'All branches';
     if (branch !== 'All branches') {
@@ -230,7 +231,7 @@ function getFilteredData() {
             return branchId == branch;
         });
     }
-    
+
     // Role filter
     const role = roleFilter ? roleFilter.value : 'All roles';
     if (role !== 'All roles') {
@@ -242,7 +243,7 @@ function getFilteredData() {
             return true;
         });
     }
-    
+
     return filtered;
 }
 
@@ -251,9 +252,9 @@ function getFilteredData() {
  */
 function renderData() {
     if (!membersGrid) return;
-    
+
     const filtered = getFilteredData();
-    
+
     if (currentView === 'active') {
         // Render active members
         membersGrid.innerHTML = filtered.map(member => {
@@ -262,18 +263,18 @@ function renderData() {
                 member.role === 'bec' ? 
                 (member.bec_position || 'BEC Member') : 
                 'General Member';
-                
+
             const canMoveToAlumni = currentUser && 
                 (currentUser.role === 'nec' || 
                 (currentUser.role === 'bec' && currentUser.branch_id === member.branch_id));
-                
+
             const branch = branches.find(b => b.id === member.branch_id);
             const university = branch ? (branch.university || branch.name) : 'Unknown';
-            
+
             // Format dates
             const createdAt = new Date(member.createdAt).toLocaleDateString();
             const updatedAt = new Date(member.updatedAt).toLocaleDateString();
-            
+
             return `
                 <div class="member-card">
                     <div class="member-name">${member.name}</div>
@@ -307,13 +308,13 @@ function renderData() {
         membersGrid.innerHTML = filtered.map(alum => {
             const user = alum.User || {};
             const branch = alum.Branch || branches.find(b => b.id === alum.branch_id) || {};
-            
+
             const displayRole = user.role === 'nec' ? 'NEC' :
                                user.role === 'bec' ? 'BEC' : 'Member';
-                               
+
             // Format dates
             const graduationDate = new Date(alum.graduation_date).toLocaleDateString();
-            
+
             return `
                 <div class="alumni-card">
                     <div class="member-name">${user.name || alum.name || 'Unknown'}</div>
@@ -358,39 +359,39 @@ function setupEventListeners() {
             }
         });
     }
-    
+
     // Search and filters
     if (searchInput) {
         searchInput.addEventListener('input', renderData);
     }
-    
+
     if (branchFilter) {
         branchFilter.addEventListener('change', renderData);
     }
-    
+
     if (roleFilter) {
         roleFilter.addEventListener('change', renderData);
     }
-    
+
     // Member form submission
     if (memberForm) {
         memberForm.addEventListener('submit', handleMemberFormSubmit);
     }
-    
+
     // Graduate form submission
     if (graduateForm) {
         graduateForm.addEventListener('submit', handleGraduateFormSubmit);
     }
-    
+
     // Modal close buttons
     document.getElementById('closeModal')?.addEventListener('click', () => {
         memberModal.style.display = 'none';
     });
-    
+
     document.getElementById('closeGraduate')?.addEventListener('click', () => {
         graduateModal.style.display = 'none';
     });
-    
+
     // Logout button
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
@@ -406,19 +407,19 @@ function setupEventListeners() {
  */
 async function handleMemberFormSubmit(e) {
     e.preventDefault();
-    
+
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const role = document.getElementById('role').value;
     const branch_id = document.getElementById('branch').value;
     const password = document.getElementById('password').value;
-    
+
     // Validate form
     if (!name || !email || !role || !branch_id) {
         showErrorMessage('Please fill in all required fields');
         return;
     }
-    
+
     try {
         const userData = {
             name,
@@ -428,14 +429,14 @@ async function handleMemberFormSubmit(e) {
             is_bec_member: role === 'bec',
             status: 'active'
         };
-        
+
         // Add password for new users
         if (password) {
             userData.password = password;
         }
-        
+
         let response;
-        
+
         if (editingMember) {
             // Update existing user
             response = await fetch(`${API_BASE_URL}/users/${editingMember}`, {
@@ -457,23 +458,23 @@ async function handleMemberFormSubmit(e) {
                 body: JSON.stringify(userData)
             });
         }
-        
+
         if (!response.ok) {
             throw new Error('Failed to save user');
         }
-        
+
         // Close modal and refresh data
         memberModal.style.display = 'none';
         await fetchMembers();
         renderTabs();
         renderData();
-        
+
         showSuccessMessage(editingMember ? 'Member updated successfully' : 'Member created successfully');
-        
+
         // Reset form and editing state
         memberForm.reset();
         editingMember = null;
-        
+
     } catch (error) {
         console.error('Error saving member:', error);
         showErrorMessage('Failed to save member. Please try again.');
@@ -485,18 +486,18 @@ async function handleMemberFormSubmit(e) {
  */
 async function handleGraduateFormSubmit(e) {
     e.preventDefault();
-    
+
     const userId = document.getElementById('graduateMemberId').value;
     const graduationDate = document.getElementById('graduationDate').value;
     const degree = document.getElementById('degree').value;
     const currentStatus = document.getElementById('currentStatus').value;
-    
+
     // Validate form
     if (!userId || !graduationDate || !degree) {
         showErrorMessage('Please fill in all required fields');
         return;
     }
-    
+
     try {
         // Get user data
         const userResponse = await fetch(`${API_BASE_URL}/users/${userId}`, {
@@ -504,13 +505,13 @@ async function handleGraduateFormSubmit(e) {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!userResponse.ok) {
             throw new Error('Failed to get user data');
         }
-        
+
         const user = await userResponse.json();
-        
+
         // Create alumni record
         const alumniData = {
             user_id: parseInt(userId),
@@ -519,7 +520,7 @@ async function handleGraduateFormSubmit(e) {
             degree,
             current_status: currentStatus
         };
-        
+
         const response = await fetch(`${API_BASE_URL}/alumni`, {
             method: 'POST',
             headers: {
@@ -528,22 +529,22 @@ async function handleGraduateFormSubmit(e) {
             },
             body: JSON.stringify(alumniData)
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to create alumni record');
         }
-        
+
         // Close modal and refresh data
         graduateModal.style.display = 'none';
         await Promise.all([fetchMembers(), fetchAlumni()]);
         renderTabs();
         renderData();
-        
+
         showSuccessMessage('Member moved to alumni successfully');
-        
+
         // Reset form
         graduateForm.reset();
-        
+
     } catch (error) {
         console.error('Error moving to alumni:', error);
         showErrorMessage('Failed to move member to alumni. Please try again.');
@@ -560,31 +561,31 @@ async function editMember(id) {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to get user data');
         }
-        
+
         const user = await response.json();
-        
+
         // Set form values
         document.getElementById('name').value = user.name || '';
         document.getElementById('email').value = user.email || '';
         document.getElementById('role').value = user.role || 'member';
         document.getElementById('branch').value = user.branch_id || '';
-        
+
         // Hide password field for editing
         document.getElementById('passwordGroup').classList.add('hidden');
-        
+
         // Set editing state
         editingMember = id;
-        
+
         // Update modal title
         document.getElementById('modalTitle').textContent = 'Edit Member';
-        
+
         // Show modal
         memberModal.style.display = 'block';
-        
+
     } catch (error) {
         console.error('Error getting member data:', error);
         showErrorMessage('Failed to load member data. Please try again.');
@@ -597,7 +598,7 @@ async function editMember(id) {
 function moveToAlumni(id) {
     // Set the user ID in the graduate form
     document.getElementById('graduateMemberId').value = id;
-    
+
     // Show the graduate modal
     graduateModal.style.display = 'block';
 }
@@ -609,7 +610,7 @@ async function deleteMember(id) {
     if (!confirm('Are you sure you want to delete this member?')) {
         return;
     }
-    
+
     try {
         const response = await fetch(`${API_BASE_URL}/users/${id}`, {
             method: 'DELETE',
@@ -617,18 +618,18 @@ async function deleteMember(id) {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to delete user');
         }
-        
+
         // Refresh data
         await fetchMembers();
         renderTabs();
         renderData();
-        
+
         showSuccessMessage('Member deleted successfully');
-        
+
     } catch (error) {
         console.error('Error deleting member:', error);
         showErrorMessage('Failed to delete member. Please try again.');
@@ -645,26 +646,26 @@ async function editAlumni(id) {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to get alumni data');
         }
-        
+
         const alumni = await response.json();
-        
+
         // Set form values in graduate form
         document.getElementById('graduateMemberId').value = alumni.user_id || '';
         document.getElementById('graduationDate').value = alumni.graduation_date ? 
             new Date(alumni.graduation_date).toISOString().split('T')[0] : '';
         document.getElementById('degree').value = alumni.degree || '';
         document.getElementById('currentStatus').value = alumni.current_status || '';
-        
+
         // Set editing state
         editingAlumni = id;
-        
+
         // Show modal
         graduateModal.style.display = 'block';
-        
+
     } catch (error) {
         console.error('Error getting alumni data:', error);
         showErrorMessage('Failed to load alumni data. Please try again.');
@@ -678,7 +679,7 @@ async function deleteAlumni(id) {
     if (!confirm('Are you sure you want to delete this alumni record?')) {
         return;
     }
-    
+
     try {
         const response = await fetch(`${API_BASE_URL}/alumni/${id}`, {
             method: 'DELETE',
@@ -686,18 +687,18 @@ async function deleteAlumni(id) {
                 'Authorization': `Bearer ${getAuthToken()}`
             }
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to delete alumni');
         }
-        
+
         // Refresh data
         await fetchAlumni();
         renderTabs();
         renderData();
-        
+
         showSuccessMessage('Alumni record deleted successfully');
-        
+
     } catch (error) {
         console.error('Error deleting alumni:', error);
         showErrorMessage('Failed to delete alumni record. Please try again.');

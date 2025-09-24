@@ -1,5 +1,6 @@
 // Authentication utilities for NaTeSA frontend
-const API_BASE_URL = 'http://localhost:3000/api';
+// Import API_BASE_URL from config.js
+// The script tag for config.js should be added before auth.js in HTML files
 
 // Check if user is logged in
 function isLoggedIn() {
@@ -53,11 +54,11 @@ async function registerUser(userData) {
     }
 
     const data = await response.json();
-    
+
     // Store token in localStorage
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('userData', JSON.stringify(data.user));
-    
+
     return data;
   } catch (error) {
     console.error('Registration error:', error);
@@ -82,11 +83,11 @@ async function loginUser(credentials) {
     }
 
     const data = await response.json();
-    
+
     // Store token in localStorage
     localStorage.setItem('authToken', data.token);
     localStorage.setItem('userData', JSON.stringify(data.user));
-    
+
     return data;
   } catch (error) {
     console.error('Login error:', error);
@@ -98,7 +99,7 @@ async function loginUser(credentials) {
 function logout() {
   localStorage.removeItem('authToken');
   localStorage.removeItem('userData');
-  
+
   // Redirect to login page
   window.location.href = 'login.html';
 }

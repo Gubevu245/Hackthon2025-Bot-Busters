@@ -1,0 +1,40 @@
+# Netlify configuration file for NaTeSA (frontend and backend)
+
+# Build settings
+[build]
+  # Directory with the static files
+  publish = "frontend"
+
+  # Build command for the backend functions
+  command = "cd backend && npm install"
+
+  # Directory where functions are located
+  functions = "netlify/functions"
+
+# Redirects for API endpoints to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# Redirects for SPA (Single Page Application)
+# This ensures that all frontend routes are handled by the frontend
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Environment variables
+[build.environment]
+  # Database connection variables
+  PGUSER = "postgres"
+  PGHOST = "natesa-botbusters-db.c1w04mc02xqr.eu-north-1.rds.amazonaws.com"
+  PGDATABASE = "postgres"
+  PGPASSWORD = "botbusters14"
+  PGPORT = "5432"
+
+# Headers to allow CORS
+[[headers]]
+  for = "/*"
+    [headers.values]
+    Access-Control-Allow-Origin = "*"
