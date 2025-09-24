@@ -3,16 +3,452 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to NATESA</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Welcome to NaTeSA</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ========================
+       Global Reset & Base
+    ======================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      color: #1e293b; /* Text */
+      background-color: #ffffff; /* Background */
+    }
+
+    /* Links & Buttons */
+    a {
+      text-decoration: none;
+      color: #3b82f6; /* Secondary Blue */
+      font-weight: 500;
+    }
+
+    a:hover {
+      color: #1e3a8a; /* Primary Blue */
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 6px;
+      background: #1e3a8a; /* Primary Blue */
+      color: #fff;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #3b82f6; /* Secondary Blue */
+    }
+
+    .btn-outline {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 6px;
+      border: 2px solid #fff;
+      color: #fff;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background: #fff;
+      color: #1e3a8a;
+    }
+
+    /* ========================
+       Navbar
+    ======================== */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0; /* Border */
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: #1e293b;
+      font-size: 16px;
+    }
+
+    .nav-links .btn {
+      font-size: 16px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #1e3a8a;
+    }
+
+    /* ========================
+       Hero Section
+    ======================== */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 30px;
+      background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+      color: #fff;
+    }
+
+    .hero-text {
+      flex: 1 1 400px;
+      max-width: 500px;
+    }
+
+    .hero-text h1 {
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 15px;
+    }
+
+    .hero-text p {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    .hero-buttons {
+      margin-top: 15px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .hero-img {
+      flex: 1 1 300px;
+      text-align: center;
+    }
+
+    .hero-img img {
+      width: 100%;
+      max-width: 350px;
+      border-radius: 10px;
+    }
+
+    /* ========================
+       Stats Section
+    ======================== */
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 40px 20px;
+      background: #f8fafc; /* Light Gray */
+      text-align: center;
+      gap: 20px;
+    }
+
+    .stat-card {
+      flex: 1 1 200px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .stat-card img {
+      width: 40px;
+      margin-bottom: 10px;
+    }
+
+    .stat-card h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 5px;
+    }
+
+    .loading {
+      opacity: 0.7;
+    }
+
+    .loading::after {
+      content: " (Loading...)";
+      font-size: 0.8rem;
+      color: #718096;
+    }
+
+    /* ========================
+       News Section
+    ======================== */
+    .news {
+      padding: 40px 20px;
+    }
+
+    .news h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .news-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .news-card {
+      flex: 1 1 280px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .news-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      margin-right: 5px;
+    }
+
+    .tag.blue { background: #dbeafe; color: #1e3a8a; }
+    .tag.green { background: #dcfce7; color: #15803d; }
+    .tag.purple { background: #ede9fe; color: #6d28d9; }
+
+    /* ========================
+       Events Section
+    ======================== */
+    .events {
+      padding: 40px 20px;
+      background: #f8fafc;
+    }
+
+    .events h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .event-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .event-card {
+      flex: 1 1 280px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .event-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* ========================
+       Mission Section
+    ======================== */
+    .mission {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .mission h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .mission-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .mission-card {
+      flex: 1 1 280px;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    .mission-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    /* ========================
+       Footer
+    ======================== */
+    footer {
+      background: #1e293b;
+      color: #ffffff;
+      padding: 40px 20px;
+    }
+
+    .footer-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .footer-about, .footer-links, .footer-contact {
+      flex: 1 1 250px;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links a {
+      display: block;
+      color: #ffffff;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .footer-contact p {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    /* ========================
+       Responsive Design
+    ======================== */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-wrap: wrap;
+        padding: 15px 20px;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .nav-links li {
+        width: 100%;
+        text-align: center;
+      }
+
+      .hero {
+        padding: 40px 20px;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-text, .hero-img {
+        max-width: 100%;
+      }
+
+      .hero-text h1 {
+        font-size: 28px;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .stats, .news-grid, .event-grid, .mission-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .stat-card {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-text h1 {
+        font-size: 24px;
+      }
+      
+      .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .hero-buttons .btn, .hero-buttons .btn-outline {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar">
-    <div class="logo">NATESA</div>
-    <ul class="nav-links">
+    <div class="logo">NaTeSA</div>
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links" id="navLinks">
       <li><a href="#">Home</a></li>
       <li><a href="#">About</a></li>
       <li><a href="#">Login</a></li>
@@ -23,7 +459,7 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-text">
-      <h1>Welcome to NATESA</h1>
+      <h1>Welcome to NaTeSA</h1>
       <p>Nazareth Tertiary Students Association-Bridging the gap between university and industry through education, leadership, and community development.</p>
       <div class="hero-buttons">
         <a href="#" class="btn">Join NaTeSA</a>
@@ -38,23 +474,22 @@
   <!-- Stats -->
   <section class="stats">
     <div class="stat-card">
-      <img src="people_1769041.png" alt="Members Icon">
-      <h2>500+</h2>
+      <img src="friendship_9783998.png" alt="Members Icon">
+      <h2 id="members-count" class="loading">...</h2>
       <p>Active Members</p>
     </div>
     <div class="stat-card">
       <img src="branches.png" alt="Branches Icon">
-      <h2>15</h2>
+      <h2 id="branches-count" class="loading">...</h2>
       <p>University Branches</p>
     </div>
     <div class="stat-card">
       <img src="calendar_11399489.png" alt="Events Icon">
-      <h2>50+</h2>
+      <h2 id="events-count" class="loading">...</h2>
       <p>Annual Events</p>
     </div>
     <div class="stat-card">
       <img src="years of excellence.png" alt="Years Icon">
-      <h2>24</h2>
       <p>Years of Excellence</p>
     </div>
   </section>
@@ -62,49 +497,16 @@
   <!-- News -->
   <section class="news">
     <h2>Latest News</h2>
-    <div class="news-grid">
-      <div class="news-card">
-        <span class="tag blue">Events</span>
-        <span class="tag purple">National</span>
-        <h3>NaTeSA Annual Conference 2024</h3>
-        <h4>By NEC commitee - 3/15/2024.</h4>
-        <p>Join us for our annual conference featuring keynote speakers and networking opportunities.</p>
-      </div>
-      <div class="news-card">
-        <span class="tag green">Announcements</span>
-        <span class="tag purple">National</span>
-        <h3>New Scholarship Program Launched</h3>
-        <h4>By NEC Commitee - 3/10/2024</h4>
-        <p>We're excited to announce our new scholarship program for outstanding students.</p>
-      </div>
-      <div class="news-card">
-        <span class="tag purple">Training</span>
-        <h3>Branch Leadership Training</h3>
-        <h4>By NEC Commitee</h4>
-        <p>Leadership training sessions for BEC members across all branches.</p>
-      </div>
+    <div class="news-grid" id="news-container">
+      <!-- News cards will be dynamically loaded here -->
     </div>
   </section>
 
   <!-- Events -->
   <section class="events">
     <h2>Upcoming Events</h2>
-    <div class="event-grid">
-      <div class="event-card">
-        <span class="tag blue">Workshop</span>
-        <h3>Career Guidance Workshop</h3>
-        <p>4/20/2024 - University of KwaZulu-Natal</p>
-      </div>
-      <div class="event-card">
-        <span class="tag green">Community Service</span>
-        <h3>Community Service Day</h3>
-        <p>4/25/2024 - Various Locations</p>
-      </div>
-      <div class="event-card">
-        <span class="tag purple">Awards Ceremony</span>
-        <h3>Academic Excellence Awards</h3>
-        <p>5/10/2024 - Durban ICC</p>
-      </div>
+    <div class="event-grid" id="events-container">
+      <!-- Event cards will be dynamically loaded here -->
     </div>
   </section>
 
@@ -119,7 +521,7 @@
       </div>
       <div class="mission-card">
         <h3>Leadership Development</h3>
-        <p>Developing future leaders through trsining programs and leadership opportunities.</p>
+        <p>Developing future leaders through training programs and leadership opportunities.</p>
       </div>
       <div class="mission-card">
         <h3>Career Guidance</h3>
@@ -153,5 +555,245 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Database connector class
+    class DatabaseConnector {
+      constructor(baseURL) {
+        this.baseURL = baseURL || 'http://your-backend-url.com/api';
+      }
+
+      // Simulate API call to get stats data
+      async getStats() {
+        try {
+          // In a real implementation, this would be a fetch call to your API
+          // For demonstration, we'll simulate a delay and return mock data
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          // Mock data - replace with actual API call
+          return {
+            members: 523,
+            branches: 17,
+            events: 56,
+            years: 24,
+          };
+          
+          // Real implementation would look like:
+          // const response = await fetch(`${this.baseURL}/stats`);
+          // if (!response.ok) throw new Error('Failed to fetch stats');
+          // return await response.json();
+        } catch (error) {
+          console.error('Error fetching stats:', error);
+          throw error;
+        }
+      }
+
+      // Get news from database
+      async getNews() {
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Mock data
+          return [
+            {
+              id: 1,
+              title: "NaTeSA Annual Conference 2024",
+              category: "Events",
+              scope: "National",
+              author: "NEC Committee",
+              date: "2024-03-15",
+              content: "Join us for our annual conference featuring keynote speakers and networking opportunities."
+            },
+            {
+              id: 2,
+              title: "New Scholarship Program Launched",
+              category: "Announcements",
+              scope: "National",
+              author: "NEC Committee",
+              date: "2024-03-10",
+              content: "We're excited to announce our new scholarship program for outstanding students."
+            },
+            {
+              id: 3,
+              title: "Branch Leadership Training",
+              category: "Training",
+              author: "NEC Committee",
+              date: "2024-03-05",
+              content: "Leadership training sessions for BEC members across all branches."
+            }
+          ];
+        } catch (error) {
+          console.error('Error fetching news:', error);
+          throw error;
+        }
+      }
+
+      // Get events from database
+      async getEvents() {
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1200));
+          
+          // Mock data
+          return [
+            {
+              id: 1,
+              title: "Career Guidance Workshop",
+              type: "Workshop",
+              date: "2024-04-20",
+              location: "University of KwaZulu-Natal"
+            },
+            {
+              id: 2,
+              title: "Community Service Day",
+              type: "Community Service",
+              date: "2024-04-25",
+              location: "Various Locations"
+            },
+            {
+              id: 3,
+              title: "Academic Excellence Awards",
+              type: "Awards Ceremony",
+              date: "2024-05-10",
+              location: "Durban ICC"
+            }
+          ];
+        } catch (error) {
+          console.error('Error fetching events:', error);
+          throw error;
+        }
+      }
+    }
+
+    // Function to update the stats section with data from the database
+    function updateStatsSection(statsData) {
+      // Remove loading class and update values
+      document.getElementById('members-count').textContent = statsData.members + '+';
+      document.getElementById('members-count').classList.remove('loading');
+      
+      document.getElementById('branches-count').textContent = statsData.branches;
+      document.getElementById('branches-count').classList.remove('loading');
+      
+      document.getElementById('events-count').textContent = statsData.events + '+';
+      document.getElementById('events-count').classList.remove('loading');
+      
+      document.getElementById('years-count').textContent = statsData.years;
+      document.getElementById('years-count').classList.remove('loading');
+    }
+
+    // Function to update news section
+    function updateNewsSection(newsData) {
+      const newsContainer = document.getElementById('news-container');
+      newsContainer.innerHTML = '';
+      
+      newsData.forEach(newsItem => {
+        const newsCard = document.createElement('div');
+        newsCard.className = 'news-card';
+        
+        let tagsHtml = `<span class="tag ${getTagColor(newsItem.category)}">${newsItem.category}</span>`;
+        if (newsItem.scope) {
+          tagsHtml += `<span class="tag purple">${newsItem.scope}</span>`;
+        }
+        
+        newsCard.innerHTML = `
+          ${tagsHtml}
+          <h3>${newsItem.title}</h3>
+          <h4>By ${newsItem.author} - ${formatDate(newsItem.date)}</h4>
+          <p>${newsItem.content}</p>
+        `;
+        
+        newsContainer.appendChild(newsCard);
+      });
+    }
+
+    // Function to update events section
+    function updateEventsSection(eventsData) {
+      const eventsContainer = document.getElementById('events-container');
+      eventsContainer.innerHTML = '';
+      
+      eventsData.forEach(eventItem => {
+        const eventCard = document.createElement('div');
+        eventCard.className = 'event-card';
+        
+        eventCard.innerHTML = `
+          <span class="tag ${getTagColor(eventItem.type)}">${eventItem.type}</span>
+          <h3>${eventItem.title}</h3>
+          <p>${formatDate(eventItem.date)} - ${eventItem.location}</p>
+        `;
+        
+        eventsContainer.appendChild(eventCard);
+      });
+    }
+
+    // Helper function to get tag color based on category
+    function getTagColor(category) {
+      switch(category.toLowerCase()) {
+        case 'events':
+        case 'workshop':
+          return 'blue';
+        case 'announcements':
+        case 'community service':
+          return 'green';
+        case 'training':
+        case 'awards ceremony':
+          return 'purple';
+        default:
+          return 'blue';
+      }
+    }
+
+    // Helper function to format dates
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+
+    // Function to handle errors and keep placeholder values
+    function handleStatsError(error) {
+      console.error('Failed to load stats from database:', error);
+      
+      // Remove loading indicators but keep placeholder values
+      document.getElementById('members-count').classList.remove('loading');
+      document.getElementById('branches-count').classList.remove('loading');
+      document.getElementById('events-count').classList.remove('loading');
+      document.getElementById('years-count').classList.remove('loading');
+    }
+
+    // Mobile menu functionality
+    document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+
+    // Initialize when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      const db = new DatabaseConnector();
+      
+      // Fetch stats from database
+      db.getStats()
+        .then(statsData => {
+          updateStatsSection(statsData);
+        })
+        .catch(error => {
+          handleStatsError(error);
+        });
+      
+      // Fetch news from database
+      db.getNews()
+        .then(newsData => {
+          updateNewsSection(newsData);
+        })
+        .catch(error => {
+          console.error('Failed to load news:', error);
+        });
+      
+      // Fetch events from database
+      db.getEvents()
+        .then(eventsData => {
+          updateEventsSection(eventsData);
+        })
+        .catch(error => {
+          console.error('Failed to load events:', error);
+        });
+    });
+  </script>
 </body>
 </html>
